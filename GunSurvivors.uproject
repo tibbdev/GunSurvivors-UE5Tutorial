@@ -20,6 +20,25 @@
 			"TargetAllowList": [
 				"Editor"
 			]
+		},
+		{
+			"Name": "BlueprintStats",
+			"Enabled": true
+		},
+		{
+			"Name": "RawInput",
+			"Enabled": true
+		},
+		{
+			"Name": "WinDualShock",
+			"Enabled": true,
+			"SupportedTargetPlatforms": [
+				"Win64"
+			]
+		},
+		{
+			"Name": "SteamController",
+			"Enabled": true
 		}
 	]
 }
