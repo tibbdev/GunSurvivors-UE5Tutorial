@@ -35,6 +35,8 @@ void ATopDownCharacter::Tick(float DeltaTime)
 	if (CanMove)
 	{
 		double move_length = MovementDirection.Length();
+		FVector location = GetActorLocation();
+		GEngine->AddOnScreenDebugMessage(0, 0.5f, FColor::White, location.ToString());
 		
 		if (move_length) // if length is anything > 0
 		{
@@ -45,10 +47,20 @@ void ATopDownCharacter::Tick(float DeltaTime)
 
 			FVector2D move_distance = DeltaTime * MovementSpeed * MovementDirection;
 
-			FVector location = GetActorLocation();
-			location += FVector(move_distance.X, 0, move_distance.Y);
+			//FVector location = GetActorLocation();
+			FVector new_location = location + FVector(move_distance.X, 0, move_distance.Y);
 
-			SetActorLocation(location);
+			if (!IsInMapBounds(new_location.X, &HorizontalLimits))
+			{
+				new_location.X = location.X;
+			}
+
+			if (!IsInMapBounds(new_location.Z, &VerticalLimits))
+			{
+				new_location.Z = location.Z;
+			}
+
+			SetActorLocation(new_location);
 		}
 	}
 }
@@ -74,11 +86,23 @@ void ATopDownCharacter::MoveTriggered(const FInputActionValue& Value)
 {
 	FVector2D movement_value = Value.Get<FVector2D>();
 
-	GEngine->AddOnScreenDebugMessage(-1, 1.5f, FColor::Yellow, movement_value.ToString());
+	GEngine->AddOnScreenDebugMessage(1, 0.5f, FColor::Yellow, movement_value.ToString());
 
 	if (CanMove)
 	{
 		MovementDirection = movement_value;
+		CharacterFlipbook->SetFlipbook(RunFlipbook);
+
+		if (movement_value.X)
+		{
+			FVector fb_scale = CharacterFlipbook->GetComponentScale();
+
+			if (fb_scale.X != movement_value.X)
+			{
+				fb_scale.X = movement_value.X;
+				CharacterFlipbook->SetWorldScale3D(fb_scale);
+			}
+		}
 	}
 }
 
@@ -86,9 +110,11 @@ void ATopDownCharacter::MoveCompleted(const FInputActionValue& Value)
 {
 	//FVector2D movement_value = Value.Get<FVector2D>();
 
-	GEngine->AddOnScreenDebugMessage(-1, 1.5f, FColor::Green, TEXT("move end"));
+	GEngine->AddOnScreenDebugMessage(1, 0.5f, FColor::Green, TEXT("move end"));
 
 	MovementDirection = FVector2D( 0, 0 );
+
+	CharacterFlipbook->SetFlipbook(IdleFlipbook);
 }
 
 void ATopDownCharacter::Shoot(const FInputActionValue& Value)
@@ -97,7 +123,16 @@ void ATopDownCharacter::Shoot(const FInputActionValue& Value)
 
 	//if (shoot_value)
 	//{
-	GEngine->AddOnScreenDebugMessage(-1, 1.5f, FColor::Red, TEXT("Bang!"));
+	GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Red, TEXT("Bang!"));
 	//}
+}
+
+bool ATopDownCharacter::IsInMapBounds(float position, FVector2D const* const limits)
+{
+	if ((limits->X < position) && (limits->Y > position))
+	{
+		return true;
+	}
+	return false;
 }
 
