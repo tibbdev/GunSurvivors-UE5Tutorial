@@ -16,6 +16,10 @@
 #include "InputActionValue.h"
 #include "GameFramework/Controller.h"
 
+#include "Engine/TimerHandle.h"
+
+#include "Bullet.h"
+
 #include "TopDownCharacter.generated.h"
 
 UCLASS()
@@ -35,6 +39,9 @@ public:
 	UPaperFlipbook* IdleFlipbook;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UPaperFlipbook* RunFlipbook;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ABullet> BulletActorToSpawn;
 
 	// Gun Stuff
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
@@ -66,6 +73,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool CanMove = true;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool CanShoot = true;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float CooldownDurationSecs = 0.3f;
+	FTimerHandle CooldownTimer;
+
 	ATopDownCharacter();
 
 	virtual void BeginPlay() override;
@@ -83,4 +96,5 @@ public:
 
 	bool IsInMapBounds(float position, FVector2D const* const limits);
 
+	void OnCooldownTimerElapsed(void);
 };

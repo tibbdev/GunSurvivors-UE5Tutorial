@@ -20,8 +20,6 @@ ABullet::ABullet()
 void ABullet::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	Launch(MovementSpeed, MovementDirection);
 }
 
 // Called every frame

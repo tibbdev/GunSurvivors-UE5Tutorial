@@ -20,6 +20,9 @@ ATopDownCharacter::ATopDownCharacter()
 
 	BulletSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("BulletSpawnPoint"));
 	BulletSpawnPoint->SetupAttachment(GunSprite);
+
+	//BulletActorToSpawn = Create<TSubclassOf<ABullet>> (TEXT("BulletActor"));
+	
 }
 
 void ATopDownCharacter::BeginPlay()
@@ -149,12 +152,35 @@ void ATopDownCharacter::MoveCompleted(const FInputActionValue& Value)
 
 void ATopDownCharacter::Shoot(const FInputActionValue& Value)
 {
-	//bool shoot_value = Value.Get<bool>();
+	if(CanShoot)
+	{
+		CanShoot = false;
 
-	//if (shoot_value)
-	//{
-	GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Red, TEXT("Bang!"));
-	//}
+		GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Red, TEXT("Bang!"));
+
+		// Spawn Bullet
+		ABullet * bullet = GetWorld()->SpawnActor<ABullet>(BulletActorToSpawn, BulletSpawnPoint->GetComponentLocation(), FRotator(0.0f, 0.0f, 0.0f));
+
+		check(bullet);
+
+		// Get mouse world location
+		APlayerController* player_controller = Cast<APlayerController>(Controller);
+		check(player_controller);
+		FVector world_location, world_direction;
+		player_controller->DeprojectMousePositionToWorld(world_location, world_direction);
+
+		// Calculate bullet direction
+		FVector current_location = GetActorLocation();
+		FVector2D bullet_direction = FVector2D(world_location.X - current_location.X, world_location.Z - current_location.Z);
+		bullet_direction.Normalize();
+
+		// Send it!
+		float bullet_speed = 300.0f;
+		bullet->Launch(bullet_speed, bullet_direction);
+
+
+		GetWorldTimerManager().SetTimer(CooldownTimer, this, &ATopDownCharacter::OnCooldownTimerElapsed, 1.0f, false, CooldownDurationSecs);
+	}
 }
 
 bool ATopDownCharacter::IsInMapBounds(float position, FVector2D const* const limits)
@@ -164,5 +190,11 @@ bool ATopDownCharacter::IsInMapBounds(float position, FVector2D const* const lim
 		return true;
 	}
 	return false;
+}
+
+void ATopDownCharacter::OnCooldownTimerElapsed(void)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Emerald, TEXT("!gnaB"));
+	CanShoot = true;
 }
 
