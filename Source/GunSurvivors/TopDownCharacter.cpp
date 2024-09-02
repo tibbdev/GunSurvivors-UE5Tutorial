@@ -1,5 +1,7 @@
 #include "TopDownCharacter.h"
 
+#include "Kismet//KismetMathLibrary.h"
+
 ATopDownCharacter::ATopDownCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -9,6 +11,15 @@ ATopDownCharacter::ATopDownCharacter()
 
 	CharacterFlipbook = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("FlipbookComp"));
 	CharacterFlipbook->SetupAttachment(CapsuleComp);
+
+	GunParent = CreateDefaultSubobject<USceneComponent>(TEXT("GunParent"));
+	GunParent->SetupAttachment(CapsuleComp);
+
+	GunSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("GunSprite"));
+	GunSprite->SetupAttachment(GunParent);
+
+	BulletSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("BulletSpawnPoint"));
+	BulletSpawnPoint->SetupAttachment(GunSprite);
 }
 
 void ATopDownCharacter::BeginPlay()
@@ -19,6 +30,8 @@ void ATopDownCharacter::BeginPlay()
 
 	if (NULL != player_controller)
 	{
+		player_controller->SetShowMouseCursor(true);
+
 		UEnhancedInputLocalPlayerSubsystem * subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(player_controller->GetLocalPlayer());
 
 		if (NULL != subsystem)
@@ -32,6 +45,7 @@ void ATopDownCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// Move Player
 	if (CanMove)
 	{
 		double move_length = MovementDirection.Length();
@@ -62,6 +76,22 @@ void ATopDownCharacter::Tick(float DeltaTime)
 
 			SetActorLocation(new_location);
 		}
+	}
+
+	// Rotate Gun
+	APlayerController* player_controller = Cast<APlayerController>(Controller);
+	if (NULL != player_controller)
+	{
+		FVector world_location, world_direction;
+		player_controller->DeprojectMousePositionToWorld(world_location, world_direction);
+
+		FVector current_location = GetActorLocation();
+		FVector start = FVector(current_location.X, 0, current_location.Z);
+		FVector target = FVector(world_location.X, 0, world_location.Z);
+
+
+		FRotator gun_rotator = UKismetMathLibrary::FindLookAtRotation(start, target);
+		GunParent->SetRelativeRotation(gun_rotator);
 	}
 }
 

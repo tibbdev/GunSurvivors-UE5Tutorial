@@ -6,7 +6,9 @@
 #include "GameFramework/Pawn.h"
 
 #include "Components/CapsuleComponent.h"
+#include "Components/SceneComponent.h"
 #include "PaperFlipbookComponent.h"
+#include "PaperSpriteComponent.h"
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -22,39 +24,45 @@ class GUNSURVIVORS_API ATopDownCharacter : public APawn
 	GENERATED_BODY()
 
 public:
+	// Player Capsule
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UCapsuleComponent* CapsuleComp;
 
+	// Character Flipbooks
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UPaperFlipbookComponent* CharacterFlipbook;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UPaperFlipbook* IdleFlipbook;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UPaperFlipbook* RunFlipbook;
 
+	// Gun Stuff
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	USceneComponent* GunParent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPaperSpriteComponent* GunSprite;
+
+	// Bullet Stuff
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	USceneComponent* BulletSpawnPoint;
+
+	// Input Stuff
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UInputMappingContext* InputMappingContext;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UInputAction* MoveAction;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UInputAction* ShootAction;
 
+	// Movement Properties
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float MovementSpeed = 100.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FVector2D HorizontalLimits;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FVector2D VerticalLimits;
-
 	UPROPERTY(BlueprintReadWrite)
 	FVector2D MovementDirection;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector2D HorizontalLimits;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector2D VerticalLimits;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool CanMove = true;
 
