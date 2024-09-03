@@ -30,7 +30,11 @@ public:
 	float MovementSpeed = 300.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	bool IsLaunched;
+	bool IsLaunched = false;
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool IsDisabled = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float BulletLifetime = 10.0f;
@@ -49,4 +53,9 @@ public:
 	void Launch(float speed, FVector2D direction);
 
 	void OnDeleteTimerTimeout(void);
+
+	UFUNCTION()
+	void OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool FromSweep, const FHitResult& SweepResult);
+
+	void DisableBullet(void);
 };
