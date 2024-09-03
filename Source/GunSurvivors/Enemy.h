@@ -10,6 +10,8 @@
 
 #include "TopDownCharacter.h"
 
+#include "Engine/TimerHandle.h"
+
 #include "Enemy.generated.h"
 
 UCLASS()
@@ -24,9 +26,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UPaperFlipbookComponent* EnemyFlipbook;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	// UPaperFlipbook* IdleFlipbook;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UPaperFlipbook* DeadFlipbook;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UPaperFlipbook* RunningFlipbook;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
@@ -47,6 +51,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool CanFollow = false;
 
+	FTimerHandle DeadTimer;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float DeadTime = 10.0f;
+
+
 	// Sets default values for this actor's properties
 	AEnemy();
 
@@ -56,4 +65,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void Die(void);
+
+	void OnDieTimerElapsed(void);
 };
