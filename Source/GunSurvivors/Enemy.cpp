@@ -13,8 +13,6 @@ AEnemy::AEnemy()
 
 	EnemyFlipbook = CreateDefaultSubobject<UPaperFlipbookComponent>("EnemyFlipbook");
 	EnemyFlipbook->SetupAttachment(RootComponent);
-
-	EnemyFlipbook->SetFlipbook(RunningFlipbook);
 }
 
 // Called when the game starts or when spawned

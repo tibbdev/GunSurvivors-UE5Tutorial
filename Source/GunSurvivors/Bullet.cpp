@@ -46,18 +46,7 @@ void ABullet::Tick(float DeltaTime)
 
 			FVector2D move_distance = DeltaTime * MovementSpeed * MovementDirection;
 
-			// FVector location = GetActorLocation();
 			FVector new_location = location + FVector(move_distance.X, 0, move_distance.Y);
-
-			// if (!IsInMapBounds(new_location.X, &HorizontalLimits))
-			// {
-			// 	new_location.X = location.X;
-			// }
-			// 
-			// if (!IsInMapBounds(new_location.Z, &VerticalLimits))
-			// {
-			// 	new_location.Z = location.Z;
-			// }
 
 			SetActorLocation(new_location);
 		}
@@ -86,9 +75,7 @@ void ABullet::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 {
 	AEnemy* Enemy = Cast<AEnemy>(OtherActor);
 
-	GEngine->AddOnScreenDebugMessage(5, 0.5f, (Enemy->IsAlive ? FColor::Orange : FColor::Emerald), TEXT("It's Alive!"));
-
-	if (NULL != Enemy)
+	if ((NULL != Enemy) && Enemy->IsAlive)
 	{
 		DisableBullet();
 		Enemy->Die();
