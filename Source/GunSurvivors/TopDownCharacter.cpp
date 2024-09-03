@@ -53,7 +53,7 @@ void ATopDownCharacter::Tick(float DeltaTime)
 	{
 		double move_length = MovementDirection.Length();
 		FVector location = GetActorLocation();
-		GEngine->AddOnScreenDebugMessage(0, 0.5f, FColor::White, location.ToString());
+		GEngine->AddOnScreenDebugMessage(0, 0.5f, FColor::Yellow, location.ToString());
 		
 		if (move_length) // if length is anything > 0
 		{
@@ -119,7 +119,7 @@ void ATopDownCharacter::MoveTriggered(const FInputActionValue& Value)
 {
 	FVector2D movement_value = Value.Get<FVector2D>();
 
-	GEngine->AddOnScreenDebugMessage(1, 0.5f, FColor::Yellow, movement_value.ToString());
+	//GEngine->AddOnScreenDebugMessage(1, 0.5f, FColor::Yellow, movement_value.ToString());
 
 	if (CanMove)
 	{
@@ -143,7 +143,7 @@ void ATopDownCharacter::MoveCompleted(const FInputActionValue& Value)
 {
 	//FVector2D movement_value = Value.Get<FVector2D>();
 
-	GEngine->AddOnScreenDebugMessage(1, 0.5f, FColor::Green, TEXT("move end"));
+	//GEngine->AddOnScreenDebugMessage(1, 0.5f, FColor::Green, TEXT("move end"));
 
 	MovementDirection = FVector2D( 0, 0 );
 
@@ -156,7 +156,7 @@ void ATopDownCharacter::Shoot(const FInputActionValue& Value)
 	{
 		CanShoot = false;
 
-		GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Red, TEXT("Bang!"));
+		//GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Red, TEXT("Bang!"));
 
 		// Spawn Bullet
 		ABullet * bullet = GetWorld()->SpawnActor<ABullet>(BulletActorToSpawn, BulletSpawnPoint->GetComponentLocation(), FRotator(0.0f, 0.0f, 0.0f));
@@ -194,7 +194,7 @@ bool ATopDownCharacter::IsInMapBounds(float position, FVector2D const* const lim
 
 void ATopDownCharacter::OnCooldownTimerElapsed(void)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Emerald, TEXT("!gnaB"));
+	//GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Emerald, TEXT("!gnaB"));
 	CanShoot = true;
 }
 
