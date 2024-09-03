@@ -1,5 +1,4 @@
 #include "Enemy.h"
-#include "Kismet/GameplayStatics.h"
 #include "Engine/GameEngine.h"
 
 // Sets default values
@@ -20,16 +19,6 @@ void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 
-
-	if (NULL == Player)
-	{
-		AActor * PlayerActor = UGameplayStatics::GetActorOfClass(GetWorld(), ATopDownCharacter::StaticClass());
-		if (NULL != PlayerActor)
-		{
-			Player = Cast<ATopDownCharacter>(PlayerActor);
-			CanFollow = true;
-		}
-	}
 }
 
 // Called every frame
