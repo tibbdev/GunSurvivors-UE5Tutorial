@@ -53,7 +53,7 @@ void ATopDownCharacter::Tick(float DeltaTime)
 	{
 		double move_length = MovementDirection.Length();
 		FVector location = GetActorLocation();
-		GEngine->AddOnScreenDebugMessage(0, 0.5f, FColor::Yellow, location.ToString());
+		//GEngine->AddOnScreenDebugMessage(0, 0.5f, FColor::Yellow, location.ToString());
 		
 		if (move_length) // if length is anything > 0
 		{
