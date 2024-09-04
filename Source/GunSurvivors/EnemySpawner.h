@@ -49,6 +49,8 @@ public:
 
 	void SpawnEnemy(void);
 
+	void SetupEnemy(AEnemy * enemy);
+
 private:
 	float m_SpawnRotationRads = 0.0f;
 	ATopDownCharacter * m_Player;

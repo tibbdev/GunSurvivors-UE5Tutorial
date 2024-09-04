@@ -72,8 +72,15 @@ void AEnemySpawner::SpawnEnemy(void)
 	SpawnLocation.Normalize();
 
 	AEnemy* enemy_to_spawn = GetWorld()->SpawnActor<AEnemy>(EnemyActorToSpawn, GetActorLocation() +  SpawnLocation * SpawnDistance, FRotator::ZeroRotator);
+	SetupEnemy(enemy_to_spawn);
+}
 
-	enemy_to_spawn->Player = m_Player;
-	enemy_to_spawn->CanFollow = true;
+void AEnemySpawner::SetupEnemy(AEnemy* enemy)
+{
+	if(NULL != enemy)
+	{
+		enemy->Player = m_Player;
+		enemy->CanFollow = true;
+	}
 }
 
