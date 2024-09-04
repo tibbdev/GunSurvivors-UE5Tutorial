@@ -68,6 +68,8 @@ void AEnemy::Die(void)
 	EnemyFlipbook->SetFlipbook(DeadFlipbook);
 	EnemyFlipbook->SetTranslucentSortPriority(-5);
 
+	EnemyDeadDelegate.Broadcast();
+
 	GetWorldTimerManager().SetTimer(DeadTimer, this, &AEnemy::OnDieTimerElapsed, 1.0f, false, DeadTime);
 }
 

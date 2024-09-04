@@ -14,6 +14,8 @@
 
 #include "Enemy.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEnemyDeadDelegate);
+
 UCLASS()
 class GUNSURVIVORS_API AEnemy : public AActor
 {
@@ -55,6 +57,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float DeadTime = 10.0f;
 
+	FEnemyDeadDelegate EnemyDeadDelegate;
 
 	// Sets default values for this actor's properties
 	AEnemy();

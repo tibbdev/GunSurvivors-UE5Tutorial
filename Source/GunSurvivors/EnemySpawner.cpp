@@ -27,6 +27,15 @@ void AEnemySpawner::BeginPlay()
 		}
 	}
 
+	if (NULL == m_GSGameMode)
+	{
+		AGameModeBase* game_mode = GetWorld()->GetAuthGameMode();
+		if (NULL != game_mode)
+		{
+			m_GSGameMode = Cast<AGunSurvivorGameMode>(game_mode);
+		}
+	}
+
 	StartSpawning();
 }
 
@@ -81,6 +90,14 @@ void AEnemySpawner::SetupEnemy(AEnemy* enemy)
 	{
 		enemy->Player = m_Player;
 		enemy->CanFollow = true;
+
+		enemy->EnemyDeadDelegate.AddDynamic(this, &AEnemySpawner::OnEnemyDead);
 	}
+}
+
+void AEnemySpawner::OnEnemyDead()
+{
+	// Increase Score
+	m_GSGameMode->IncreaseScore();
 }
 

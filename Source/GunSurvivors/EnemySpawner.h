@@ -10,6 +10,8 @@
 
 #include "TopDownCharacter.h"
 
+#include "GunSurvivorGameMode.h"
+
 #include "EnemySpawner.generated.h"
 
 UCLASS()
@@ -33,13 +35,10 @@ public:
 
 	FTimerHandle SpawnTimer;
 
-	// Sets default values for this actor's properties
 	AEnemySpawner();
 
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	void OnSpawnTimerElapsed(void);
@@ -51,9 +50,13 @@ public:
 
 	void SetupEnemy(AEnemy * enemy);
 
+	UFUNCTION()
+	void OnEnemyDead();
+
 private:
 	float m_SpawnRotationRads = 0.0f;
 	ATopDownCharacter * m_Player;
 	uint32 m_SpawnCount = 0;
+	AGunSurvivorGameMode* m_GSGameMode;
 
 };
